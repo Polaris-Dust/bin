@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+for arg in "$@"
+do
+  case ${arg} in
+    draft=*)
+      draft="${arg#*=}"
+      shift
+      ;;
+    prerelease=*)
+      prerelease="${arg#*=}"
+      shift
+      ;;
+    *)
+      ;;
+  esac
+done
+
+if [ ! -z "$draft" ] && [ ! "$draft" = $(jq -r '.release.draft' "$GITHUB_EVENT_PATH") ]; then
+  echo "Release properties don't match the draft filter"
+  exit 78
+fi
+
+if [ ! -z "$prerelease" ] && [ ! "$prerelease" = $(jq -r '.release.prerelease' "$GITHUB_EVENT_PATH") ]; then
+  echo "Release properties don't match the prerelease filter"
+  exit 78
+fi

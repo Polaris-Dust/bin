@@ -212,6 +212,30 @@ action "environment-filter" {
 }
 ```
 
+### release
+
+Continue if the event payload matches the release properties provided.
+
+```workflow
+action "release-filter" {
+  uses = "actions/bin/filter@master"
+  args = "release draft=true"
+}
+```
+
+The list of supported properties is:
+* draft=(true|false)
+* prerelease=(true|false)
+
+Properties can be combined and are ignored when not provided.
+
+```workflow
+action "release-filter" {
+  uses = "actions/bin/filter@master"
+  args = "release draft=false prerelease=true"
+}
+```
+
 ## License
 
 The Dockerfile and associated scripts and documentation in this project are released under the [MIT License](LICENSE).
